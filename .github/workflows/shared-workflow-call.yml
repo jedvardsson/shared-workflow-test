@@ -3,15 +3,19 @@ name: shared-workflow-call.yml
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        type: environment
-        required: true
+      some-setting:
+        type: string
+        required: false
 
 jobs:
   shared-workflow-call:
+    strategy:
+      matrix:
+        environment: [dev, prod]
     uses: ./.github/workflows/shared-workflow.yml
     with:
-      environment: ${{inputs.environment}}
+      environment: ${{matrix.environment}}
+      some-setting: ${{inputs.some-setting}}
     secrets:
       PRJ_SECRET: ${{secrets.PRJ_SECRET}}
       ENV_SECRET: ${{secrets.ENV_SECRET}}
