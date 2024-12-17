@@ -1,0 +1,27 @@
+name: shared-workflow.yml
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      PRJ_SECRET:
+        required: true
+      ENV_SECRET:
+        required: true
+
+jobs:
+  shared-workflow:
+    environment:
+      name: ${{inputs.environment}}
+    runs-on: [ubuntu-24.04]
+    steps:
+      - name: echo stuff
+        run: |
+          echo "inputs.environment=${{inputs.environment}}"
+          echo "vars.PRJ_VAR=${{vars.PRJ_VAR}}"
+          echo "secrets.PRJ_SECRET=$(echo "${{secrets.PRJ_SECRET}}"|base64)"
+          echo "env.ENV_VAR=${{vars.ENV_VAR}}"
+          echo "secrets.ENV_SECRET=$(echo "${{secrets.ENV_SECRET}}"|base64)"
